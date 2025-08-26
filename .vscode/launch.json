@@ -1,0 +1,69 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Flutter Chess (Debug)",
+            "request": "launch",
+            "type": "dart",
+            "program": "lib/main.dart",
+            "args": [
+                "--flavor",
+                "development"
+            ]
+        },
+        {
+            "name": "Flutter Chess (Release)",
+            "request": "launch",
+            "type": "dart",
+            "program": "lib/main.dart",
+            "flutterMode": "release"
+        },
+        {
+            "name": "Flutter Chess (Profile)",
+            "request": "launch",
+            "type": "dart",
+            "program": "lib/main.dart",
+            "flutterMode": "profile"
+        },
+        {
+            "name": "Flutter Chess (Web)",
+            "request": "launch",
+            "type": "dart",
+            "program": "lib/main.dart",
+            "deviceId": "web-server",
+            "args": [
+                "--web-renderer",
+                "html"
+            ]
+        },
+        {
+            "name": "Flutter Chess (Chrome)",
+            "request": "launch",
+            "type": "dart",
+            "program": "lib/main.dart",
+            "deviceId": "chrome",
+            "args": [
+                "--web-renderer",
+                "html"
+            ]
+        },
+        {
+            "name": "Flutter Tests - All",
+            "request": "launch",
+            "type": "dart",
+            "program": "test/",
+            "args": [
+                "--coverage"
+            ]
+        },
+        {
+            "name": "Flutter Tests - Move Controller",
+            "request": "launch",
+            "type": "dart",
+            "program": "test/engine/move_controller.dart"
+        }
+    ]
+}
