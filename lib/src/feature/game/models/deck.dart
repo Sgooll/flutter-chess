@@ -5,22 +5,21 @@ class Deck {
 
   Deck({required this.deckMatrix});
 
-  factory Deck.defaultDeck() {
-
+  factory Deck.whitePlayer() {
     List<Figure> majorFigures(FigureColor color) => [
-      Figure(type: FigureType.rook, color: color),
-      Figure(type: FigureType.knight, color: color),
-      Figure(type: FigureType.bishop, color: color),
-      Figure(type: FigureType.queen, color: color),
-      Figure(type: FigureType.king, color: color),
-      Figure(type: FigureType.bishop, color: color),
-      Figure(type: FigureType.knight, color: color),
-      Figure(type: FigureType.rook, color: color),
-    ];
+          Figure(type: FigureType.rook, color: color),
+          Figure(type: FigureType.knight, color: color),
+          Figure(type: FigureType.bishop, color: color),
+          Figure(type: FigureType.queen, color: color),
+          Figure(type: FigureType.king, color: color),
+          Figure(type: FigureType.bishop, color: color),
+          Figure(type: FigureType.knight, color: color),
+          Figure(type: FigureType.rook, color: color),
+        ];
 
     return Deck(deckMatrix: {
       for (int i = 0; i < 8; i++)
-      FigurePosition(i, 0): majorFigures(FigureColor.black)[i],
+        FigurePosition(i, 0): majorFigures(FigureColor.black)[i],
       for (int i = 0; i < 8; i++)
         FigurePosition(i, 1):
             Figure(type: FigureType.pawn, color: FigureColor.black),
@@ -29,7 +28,32 @@ class Deck {
             Figure(type: FigureType.pawn, color: FigureColor.white),
       for (int i = 0; i < 8; i++)
         FigurePosition(i, 7): majorFigures(FigureColor.white)[i],
-     
+    });
+  }
+
+  factory Deck.blackPlayer() {
+    List<Figure> majorFigures(FigureColor color) => [
+          Figure(type: FigureType.rook, color: color),
+          Figure(type: FigureType.knight, color: color),
+          Figure(type: FigureType.bishop, color: color),
+          Figure(type: FigureType.queen, color: color),
+          Figure(type: FigureType.king, color: color),
+          Figure(type: FigureType.bishop, color: color),
+          Figure(type: FigureType.knight, color: color),
+          Figure(type: FigureType.rook, color: color),
+        ];
+
+    return Deck(deckMatrix: {
+      for (int i = 0; i < 8; i++)
+        FigurePosition(i, 0): majorFigures(FigureColor.white)[i],
+      for (int i = 0; i < 8; i++)
+        FigurePosition(i, 1):
+            Figure(type: FigureType.pawn, color: FigureColor.white),
+      for (int i = 0; i < 8; i++)
+        FigurePosition(i, 6):
+            Figure(type: FigureType.pawn, color: FigureColor.black),
+      for (int i = 0; i < 8; i++)
+        FigurePosition(i, 7): majorFigures(FigureColor.black)[i],
     });
   }
 

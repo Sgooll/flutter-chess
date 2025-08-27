@@ -16,16 +16,14 @@ class MoveController {
       FigureType.king => getKingMoves(position, figure, deck),
     };
 
-
     return potentialMoves.where((move) {
       final newDeck = _simulateMove(deck, position, move);
-      
+
       return !isKingInCheck(figure.color, newDeck);
     }).toList();
   }
 
   Deck _simulateMove(Deck deck, FigurePosition from, FigurePosition to) {
-
     final newMatrix = Map<FigurePosition, Figure>.from(deck.deckMatrix);
     final figure = newMatrix.remove(from);
 
@@ -304,7 +302,6 @@ class MoveController {
     return moves;
   }
 
-  @visibleForTesting
   bool isKingInCheck(FigureColor kingColor, Deck deck) {
     FigurePosition? kingPosition;
     for (final entry in deck.deckMatrix.entries) {

@@ -8,7 +8,7 @@ class ChessEngineScope extends InheritedWidget {
   final ChessEngine chessEngine;
 
   static ChessEngine of(BuildContext context) {
-    final ChessEngineScope? result = context.dependOnInheritedWidgetOfExactType<ChessEngineScope>();
+    final ChessEngineScope? result = context.getInheritedWidgetOfExactType<ChessEngineScope>();
     return result!.chessEngine;
   }
 

@@ -100,9 +100,9 @@ void main() {
         final moves =
             moveController.getPawnMoves(pawnPosition, whitePawn, deck);
 
-        expect(moves, contains(FigurePosition(4, 3))); // обычный ход
-        expect(moves, contains(FigurePosition(5, 3))); // атака вправо
-        expect(moves, contains(FigurePosition(3, 3))); // атака влево
+        expect(moves, contains(FigurePosition(4, 3)));
+        expect(moves, contains(FigurePosition(5, 3)));
+        expect(moves, contains(FigurePosition(3, 3)));
         expect(moves.length, equals(3));
       });
 
@@ -120,9 +120,9 @@ void main() {
         final moves =
             moveController.getPawnMoves(pawnPosition, blackPawn, deck);
 
-        expect(moves, contains(FigurePosition(4, 5))); // обычный ход
-        expect(moves, contains(FigurePosition(5, 5))); // атака вправо
-        expect(moves, contains(FigurePosition(3, 5))); // атака влево
+        expect(moves, contains(FigurePosition(4, 5)));
+        expect(moves, contains(FigurePosition(5, 5)));
+        expect(moves, contains(FigurePosition(3, 5)));
         expect(moves.length, equals(3));
       });
 
@@ -140,7 +140,7 @@ void main() {
         final moves =
             moveController.getPawnMoves(pawnPosition, whitePawn, deck);
 
-        expect(moves, contains(FigurePosition(4, 3))); // только обычный ход
+        expect(moves, contains(FigurePosition(4, 3)));
         expect(moves, isNot(contains(FigurePosition(5, 3))));
         expect(moves, isNot(contains(FigurePosition(3, 3))));
         expect(moves.length, equals(1));
@@ -174,15 +174,15 @@ void main() {
 
       test('пешка не должна атаковать за пределы доски', () {
         final deck = Deck(deckMatrix: {});
-        final pawnPosition = FigurePosition(0, 4); // левый край
+        final pawnPosition = FigurePosition(0, 4);
         final whitePawn =
             Figure(type: FigureType.pawn, color: FigureColor.white);
 
         final moves =
             moveController.getPawnMoves(pawnPosition, whitePawn, deck);
 
-        expect(moves, contains(FigurePosition(0, 3))); // обычный ход
-        expect(moves, isNot(contains(FigurePosition(-1, 3)))); // не за пределы
+        expect(moves, contains(FigurePosition(0, 3)));
+        expect(moves, isNot(contains(FigurePosition(-1, 3))));
         expect(moves.length, equals(1));
       });
 
@@ -192,7 +192,7 @@ void main() {
         final blockingFigure =
             Figure(type: FigureType.pawn, color: FigureColor.black);
         final deck = Deck(deckMatrix: {
-          FigurePosition(4, 4): blockingFigure, // блокирует второй шаг
+          FigurePosition(4, 4): blockingFigure,
         });
         final pawnPosition = FigurePosition(4, 6);
         final whitePawn =
@@ -201,9 +201,9 @@ void main() {
         final moves =
             moveController.getPawnMoves(pawnPosition, whitePawn, deck);
 
-        expect(moves, contains(FigurePosition(4, 5))); // первый шаг
+        expect(moves, contains(FigurePosition(4, 5)));
         expect(moves,
-            isNot(contains(FigurePosition(4, 4)))); // второй шаг заблокирован
+            isNot(contains(FigurePosition(4, 4))));
         expect(moves.length, equals(1));
       });
     });
@@ -219,14 +219,14 @@ void main() {
             moveController.getKnightMoves(knightPosition, whiteKnight, deck);
 
         final expectedMoves = [
-          FigurePosition(6, 5), // (2, 1)
-          FigurePosition(6, 3), // (2, -1)
-          FigurePosition(2, 5), // (-2, 1)
-          FigurePosition(2, 3), // (-2, -1)
-          FigurePosition(5, 6), // (1, 2)
-          FigurePosition(5, 2), // (1, -2)
-          FigurePosition(3, 6), // (-1, 2)
-          FigurePosition(3, 2), // (-1, -2)
+          FigurePosition(6, 5),
+          FigurePosition(6, 3),
+          FigurePosition(2, 5),
+          FigurePosition(2, 3),
+          FigurePosition(5, 6),
+          FigurePosition(5, 2),
+          FigurePosition(3, 6),
+          FigurePosition(3, 2),
         ];
 
         expect(moves.length, equals(8));
@@ -249,9 +249,9 @@ void main() {
         final moves =
             moveController.getKnightMoves(knightPosition, whiteKnight, deck);
 
-        expect(moves, contains(FigurePosition(6, 5))); // может атаковать
-        expect(moves, contains(FigurePosition(2, 3))); // может атаковать
-        expect(moves.length, equals(8)); // все ходы доступны
+        expect(moves, contains(FigurePosition(6, 5)));
+        expect(moves, contains(FigurePosition(2, 3)));
+        expect(moves.length, equals(2));
       });
 
       test('конь не должен атаковать союзные фигуры', () {
@@ -271,17 +271,17 @@ void main() {
         expect(
             moves,
             isNot(
-                contains(FigurePosition(6, 5)))); // не может атаковать союзника
+                contains(FigurePosition(6, 5))));
         expect(
             moves,
             isNot(
                 contains(FigurePosition(2, 3)))); // не может атаковать союзника
-        expect(moves.length, equals(6)); // только 6 ходов доступны
+        expect(moves.length, equals(6));
       });
 
       test('конь в углу доски должен иметь только 2 возможных хода', () {
         final deck = Deck(deckMatrix: {});
-        final knightPosition = FigurePosition(0, 0); // левый верхний угол
+        final knightPosition = FigurePosition(0, 0);
         final whiteKnight =
             Figure(type: FigureType.knight, color: FigureColor.white);
 
@@ -289,8 +289,8 @@ void main() {
             moveController.getKnightMoves(knightPosition, whiteKnight, deck);
 
         final expectedMoves = [
-          FigurePosition(2, 1), // (2, 1)
-          FigurePosition(1, 2), // (1, 2)
+          FigurePosition(2, 1),
+          FigurePosition(1, 2),
         ];
 
         expect(moves.length, equals(2));
@@ -310,8 +310,8 @@ void main() {
             moveController.getKnightMoves(knightPosition, whiteKnight, deck);
 
         final expectedMoves = [
-          FigurePosition(5, 6), // (-2, -1)
-          FigurePosition(6, 5), // (-1, -2)
+          FigurePosition(5, 6),
+          FigurePosition(6, 5),
         ];
 
         expect(moves.length, equals(2));
@@ -322,7 +322,7 @@ void main() {
 
       test('конь на краю доски должен иметь ограниченное количество ходов', () {
         final deck = Deck(deckMatrix: {});
-        final knightPosition = FigurePosition(0, 4); // левый край
+        final knightPosition = FigurePosition(0, 4);
         final whiteKnight =
             Figure(type: FigureType.knight, color: FigureColor.white);
 
@@ -330,10 +330,10 @@ void main() {
             moveController.getKnightMoves(knightPosition, whiteKnight, deck);
 
         final expectedMoves = [
-          FigurePosition(2, 5), // (2, 1)
-          FigurePosition(2, 3), // (2, -1)
-          FigurePosition(1, 6), // (1, 2)
-          FigurePosition(1, 2), // (1, -2)
+          FigurePosition(2, 5),
+          FigurePosition(2, 3),
+          FigurePosition(1, 6),
+          FigurePosition(1, 2),
         ];
 
         expect(moves.length, equals(4));
@@ -363,11 +363,11 @@ void main() {
         final blockingFigure =
             Figure(type: FigureType.pawn, color: FigureColor.black);
         final deck = Deck(deckMatrix: {
-          FigurePosition(4, 3): blockingFigure, // сверху
-          FigurePosition(4, 5): blockingFigure, // снизу
-          FigurePosition(3, 4): blockingFigure, // слева
-          FigurePosition(5, 4): blockingFigure, // справа
-          FigurePosition(3, 3): blockingFigure, // диагонали
+          FigurePosition(4, 3): blockingFigure,
+          FigurePosition(4, 5): blockingFigure,
+          FigurePosition(3, 4): blockingFigure,
+          FigurePosition(5, 4): blockingFigure,
+          FigurePosition(3, 3): blockingFigure,
           FigurePosition(3, 5): blockingFigure,
           FigurePosition(5, 3): blockingFigure,
           FigurePosition(5, 5): blockingFigure,
@@ -379,20 +379,18 @@ void main() {
         final moves =
             moveController.getKnightMoves(knightPosition, whiteKnight, deck);
 
-        // Конь должен иметь все 8 ходов, так как он перепрыгивает
         expect(moves.length, equals(8));
       });
 
       test('конь рядом с границей должен исключать ходы за пределы доски', () {
         final deck = Deck(deckMatrix: {});
-        final knightPosition = FigurePosition(1, 1); // близко к углу
+          final knightPosition = FigurePosition(1, 1);
         final whiteKnight =
             Figure(type: FigureType.knight, color: FigureColor.white);
 
         final moves =
             moveController.getKnightMoves(knightPosition, whiteKnight, deck);
 
-        // Проверяем, что нет ходов с отрицательными координатами
         for (final move in moves) {
           expect(move.x, greaterThanOrEqualTo(0));
           expect(move.y, greaterThanOrEqualTo(0));
@@ -411,10 +409,10 @@ void main() {
         final enemyPawn =
             Figure(type: FigureType.pawn, color: FigureColor.black);
         final deck = Deck(deckMatrix: {
-          FigurePosition(6, 5): allyPawn, // не может атаковать
-          FigurePosition(6, 3): enemyPawn, // может атаковать
-          FigurePosition(2, 5): allyPawn, // не может атаковать
-          FigurePosition(2, 3): enemyPawn, // может атаковать
+          FigurePosition(6, 5): allyPawn,
+          FigurePosition(6, 3): enemyPawn,
+          FigurePosition(2, 5): allyPawn,
+          FigurePosition(2, 3): enemyPawn,
         });
         final knightPosition = FigurePosition(4, 4);
         final whiteKnight =
@@ -423,13 +421,13 @@ void main() {
         final moves =
             moveController.getKnightMoves(knightPosition, whiteKnight, deck);
 
-        expect(moves, contains(FigurePosition(6, 3))); // атака врага
-        expect(moves, contains(FigurePosition(2, 3))); // атака врага
+        expect(moves, contains(FigurePosition(6, 3)));
+        expect(moves, contains(FigurePosition(2, 3)));
         expect(moves,
-            isNot(contains(FigurePosition(6, 5)))); // не атакует союзника
+            isNot(contains(FigurePosition(6, 5))));
         expect(moves,
-            isNot(contains(FigurePosition(2, 5)))); // не атакует союзника
-        expect(moves.length, equals(6)); // 4 свободных + 2 атаки врагов
+            isNot(contains(FigurePosition(2, 5))));
+        expect(moves.length, equals(6));
       });
     });
 
@@ -445,20 +443,15 @@ void main() {
         final moves =
             moveController.getBishopMoves(bishopPosition, whiteBishop, deck);
 
-        // Проверяем все 4 диагонали
         final expectedMoves = [
-          // Верхняя правая диагональ
           FigurePosition(5, 5), FigurePosition(6, 6), FigurePosition(7, 7),
-          // Верхняя левая диагональ
           FigurePosition(3, 5), FigurePosition(2, 6), FigurePosition(1, 7),
-          // Нижняя правая диагональ
           FigurePosition(5, 3), FigurePosition(6, 2), FigurePosition(7, 1),
-          // Нижняя левая диагональ
           FigurePosition(3, 3), FigurePosition(2, 2), FigurePosition(1, 1),
           FigurePosition(0, 0),
         ];
 
-        expect(moves.length, equals(13)); // 3+3+3+4 клетки
+        expect(moves.length, equals(13));
         for (final expectedMove in expectedMoves) {
           expect(moves, contains(expectedMove));
         }
@@ -470,8 +463,8 @@ void main() {
         final enemyPawn =
             Figure(type: FigureType.pawn, color: FigureColor.black);
         final deck = Deck(deckMatrix: {
-          FigurePosition(6, 6): enemyPawn, // блокирует верхнюю правую диагональ
-          FigurePosition(2, 2): enemyPawn, // блокирует нижнюю левую диагональ
+          FigurePosition(6, 6): enemyPawn,
+          FigurePosition(2, 2): enemyPawn,
         });
         final bishopPosition = FigurePosition(4, 4);
         final whiteBishop =
@@ -480,17 +473,14 @@ void main() {
         final moves =
             moveController.getBishopMoves(bishopPosition, whiteBishop, deck);
 
-        // Должен атаковать вражеские фигуры
         expect(moves, contains(FigurePosition(6, 6)));
         expect(moves, contains(FigurePosition(2, 2)));
 
-        // Но не должен идти дальше них
         expect(moves, isNot(contains(FigurePosition(7, 7))));
         expect(moves, isNot(contains(FigurePosition(1, 1))));
 
-        // Другие диагонали должны быть свободны
-        expect(moves, contains(FigurePosition(5, 5))); // до блокировки
-        expect(moves, contains(FigurePosition(3, 3))); // до блокировки
+        expect(moves, contains(FigurePosition(5, 5)));
+        expect(moves, contains(FigurePosition(3, 3)));
       });
 
       test(
@@ -499,8 +489,8 @@ void main() {
         final allyPawn =
             Figure(type: FigureType.pawn, color: FigureColor.white);
         final deck = Deck(deckMatrix: {
-          FigurePosition(6, 6): allyPawn, // блокирует верхнюю правую диагональ
-          FigurePosition(2, 2): allyPawn, // блокирует нижнюю левую диагональ
+            FigurePosition(6, 6): allyPawn,
+          FigurePosition(2, 2): allyPawn,
         });
         final bishopPosition = FigurePosition(4, 4);
         final whiteBishop =
@@ -509,22 +499,19 @@ void main() {
         final moves =
             moveController.getBishopMoves(bishopPosition, whiteBishop, deck);
 
-        // Не должен атаковать союзные фигуры
         expect(moves, isNot(contains(FigurePosition(6, 6))));
         expect(moves, isNot(contains(FigurePosition(2, 2))));
 
-        // И не должен идти дальше них
         expect(moves, isNot(contains(FigurePosition(7, 7))));
         expect(moves, isNot(contains(FigurePosition(1, 1))));
 
-        // Но может идти до них
         expect(moves, contains(FigurePosition(5, 5)));
         expect(moves, contains(FigurePosition(3, 3)));
       });
 
       test('слон в углу доски должен двигаться только по одной диагонали', () {
         final deck = Deck(deckMatrix: {});
-        final bishopPosition = FigurePosition(0, 0); // левый верхний угол
+        final bishopPosition = FigurePosition(0, 0);
         final whiteBishop =
             Figure(type: FigureType.bishop, color: FigureColor.white);
 
@@ -551,7 +538,7 @@ void main() {
           'слон в противоположном углу должен двигаться только по одной диагонали',
           () {
         final deck = Deck(deckMatrix: {});
-        final bishopPosition = FigurePosition(7, 7); // правый нижний угол
+        final bishopPosition = FigurePosition(7, 7);
         final whiteBishop =
             Figure(type: FigureType.bishop, color: FigureColor.white);
 
@@ -577,18 +564,15 @@ void main() {
       test('слон на краю доски должен иметь ограниченные диагональные ходы',
           () {
         final deck = Deck(deckMatrix: {});
-        final bishopPosition = FigurePosition(0, 4); // левый край
+        final bishopPosition = FigurePosition(0, 4);
         final whiteBishop =
             Figure(type: FigureType.bishop, color: FigureColor.white);
 
         final moves =
             moveController.getBishopMoves(bishopPosition, whiteBishop, deck);
 
-        // Только две диагонали доступны
         final expectedMoves = [
-          // Верхняя правая диагональ
           FigurePosition(1, 5), FigurePosition(2, 6), FigurePosition(3, 7),
-          // Нижняя правая диагональ
           FigurePosition(1, 3), FigurePosition(2, 2), FigurePosition(3, 1),
           FigurePosition(4, 0),
         ];
@@ -621,9 +605,9 @@ void main() {
         final enemyPawn =
             Figure(type: FigureType.pawn, color: FigureColor.black);
         final deck = Deck(deckMatrix: {
-          FigurePosition(5, 5): allyPawn, // блокирует одну диагональ
-          FigurePosition(3, 3): enemyPawn, // атакует на другой диагонали
-          FigurePosition(6, 2): enemyPawn, // атакует на третьей диагонали
+          FigurePosition(5, 5): allyPawn,
+          FigurePosition(3, 3): enemyPawn,
+          FigurePosition(6, 2): enemyPawn,
         });
         final bishopPosition = FigurePosition(4, 4);
         final whiteBishop =
@@ -632,14 +616,11 @@ void main() {
         final moves =
             moveController.getBishopMoves(bishopPosition, whiteBishop, deck);
 
-        // Может атаковать врагов
         expect(moves, contains(FigurePosition(3, 3)));
         expect(moves, contains(FigurePosition(6, 2)));
 
-        // Не может атаковать союзника
         expect(moves, isNot(contains(FigurePosition(5, 5))));
 
-        // Не может идти дальше блокирующих фигур
         expect(moves, isNot(contains(FigurePosition(6, 6))));
         expect(moves, isNot(contains(FigurePosition(2, 2))));
         expect(moves, isNot(contains(FigurePosition(7, 1))));
@@ -647,14 +628,14 @@ void main() {
 
       test('слон не должен выходить за границы доски', () {
         final deck = Deck(deckMatrix: {});
-        final bishopPosition = FigurePosition(1, 1); // близко к углу
+        final bishopPosition = FigurePosition(1, 1);
         final whiteBishop =
             Figure(type: FigureType.bishop, color: FigureColor.white);
 
         final moves =
             moveController.getBishopMoves(bishopPosition, whiteBishop, deck);
 
-        // Проверяем, что все ходы в пределах доски
+
         for (final move in moves) {
           expect(move.x, greaterThanOrEqualTo(0));
           expect(move.y, greaterThanOrEqualTo(0));
@@ -674,7 +655,6 @@ void main() {
         final moves =
             moveController.getBishopMoves(bishopPosition, whiteBishop, deck);
 
-        // Проверяем количество ходов по каждой диагонали
         final upperRight = moves.where((m) => m.x > 3 && m.y > 3).length;
         final upperLeft = moves.where((m) => m.x < 3 && m.y > 3).length;
         final lowerRight = moves.where((m) => m.x > 3 && m.y < 3).length;
@@ -700,21 +680,16 @@ void main() {
         final moves =
             moveController.getRookMoves(rookPosition, whiteRook, deck);
 
-        // Проверяем все 4 направления (горизонталь и вертикаль)
         final expectedMoves = [
-          // Вправо
           FigurePosition(5, 4), FigurePosition(6, 4), FigurePosition(7, 4),
-          // Влево
           FigurePosition(3, 4), FigurePosition(2, 4), FigurePosition(1, 4),
           FigurePosition(0, 4),
-          // Вверх
           FigurePosition(4, 5), FigurePosition(4, 6), FigurePosition(4, 7),
-          // Вниз
           FigurePosition(4, 3), FigurePosition(4, 2), FigurePosition(4, 1),
           FigurePosition(4, 0),
         ];
 
-        expect(moves.length, equals(14)); // 3+4+3+4 клетки
+        expect(moves.length, equals(14));
         for (final expectedMove in expectedMoves) {
           expect(moves, contains(expectedMove));
         }
@@ -726,8 +701,8 @@ void main() {
         final enemyPawn =
             Figure(type: FigureType.pawn, color: FigureColor.black);
         final deck = Deck(deckMatrix: {
-          FigurePosition(6, 4): enemyPawn, // блокирует движение вправо
-          FigurePosition(4, 2): enemyPawn, // блокирует движение вниз
+          FigurePosition(6, 4): enemyPawn,
+          FigurePosition(4, 2): enemyPawn,
         });
         final rookPosition = FigurePosition(4, 4);
         final whiteRook =
@@ -736,17 +711,14 @@ void main() {
         final moves =
             moveController.getRookMoves(rookPosition, whiteRook, deck);
 
-        // Должна атаковать вражеские фигуры
         expect(moves, contains(FigurePosition(6, 4)));
         expect(moves, contains(FigurePosition(4, 2)));
 
-        // Но не должна идти дальше них
         expect(moves, isNot(contains(FigurePosition(7, 4))));
         expect(moves, isNot(contains(FigurePosition(4, 1))));
 
-        // Другие направления должны быть свободны
-        expect(moves, contains(FigurePosition(5, 4))); // до блокировки
-        expect(moves, contains(FigurePosition(4, 3))); // до блокировки
+        expect(moves, contains(FigurePosition(5, 4)));
+        expect(moves, contains(FigurePosition(4, 3)));
       });
 
       test(
@@ -755,8 +727,8 @@ void main() {
         final allyPawn =
             Figure(type: FigureType.pawn, color: FigureColor.white);
         final deck = Deck(deckMatrix: {
-          FigurePosition(6, 4): allyPawn, // блокирует движение вправо
-          FigurePosition(4, 2): allyPawn, // блокирует движение вниз
+          FigurePosition(6, 4): allyPawn,
+          FigurePosition(4, 2): allyPawn,
         });
         final rookPosition = FigurePosition(4, 4);
         final whiteRook =
@@ -765,15 +737,12 @@ void main() {
         final moves =
             moveController.getRookMoves(rookPosition, whiteRook, deck);
 
-        // Не должна атаковать союзные фигуры
         expect(moves, isNot(contains(FigurePosition(6, 4))));
         expect(moves, isNot(contains(FigurePosition(4, 2))));
 
-        // И не должна идти дальше них
         expect(moves, isNot(contains(FigurePosition(7, 4))));
         expect(moves, isNot(contains(FigurePosition(4, 1))));
 
-        // Но может идти до них
         expect(moves, contains(FigurePosition(5, 4)));
         expect(moves, contains(FigurePosition(4, 3)));
       });
@@ -781,7 +750,7 @@ void main() {
       test('ладья в углу доски должна двигаться только по двум направлениям',
           () {
         final deck = Deck(deckMatrix: {});
-        final rookPosition = FigurePosition(0, 0); // левый верхний угол
+        final rookPosition = FigurePosition(0, 0);
         final whiteRook =
             Figure(type: FigureType.rook, color: FigureColor.white);
 
@@ -789,11 +758,9 @@ void main() {
             moveController.getRookMoves(rookPosition, whiteRook, deck);
 
         final expectedMoves = [
-          // Вправо
           FigurePosition(1, 0), FigurePosition(2, 0), FigurePosition(3, 0),
           FigurePosition(4, 0), FigurePosition(5, 0), FigurePosition(6, 0),
           FigurePosition(7, 0),
-          // Вверх
           FigurePosition(0, 1), FigurePosition(0, 2), FigurePosition(0, 3),
           FigurePosition(0, 4), FigurePosition(0, 5), FigurePosition(0, 6),
           FigurePosition(0, 7),
@@ -809,7 +776,7 @@ void main() {
           'ладья в противоположном углу должна двигаться только по двум направлениям',
           () {
         final deck = Deck(deckMatrix: {});
-        final rookPosition = FigurePosition(7, 7); // правый нижний угол
+        final rookPosition = FigurePosition(7, 7);
         final whiteRook =
             Figure(type: FigureType.rook, color: FigureColor.white);
 
@@ -817,11 +784,9 @@ void main() {
             moveController.getRookMoves(rookPosition, whiteRook, deck);
 
         final expectedMoves = [
-          // Влево
           FigurePosition(6, 7), FigurePosition(5, 7), FigurePosition(4, 7),
           FigurePosition(3, 7), FigurePosition(2, 7), FigurePosition(1, 7),
           FigurePosition(0, 7),
-          // Вниз
           FigurePosition(7, 6), FigurePosition(7, 5), FigurePosition(7, 4),
           FigurePosition(7, 3), FigurePosition(7, 2), FigurePosition(7, 1),
           FigurePosition(7, 0),
@@ -835,22 +800,18 @@ void main() {
 
       test('ладья на краю доски должна иметь ограниченные ходы', () {
         final deck = Deck(deckMatrix: {});
-        final rookPosition = FigurePosition(0, 4); // левый край
+        final rookPosition = FigurePosition(0, 4);
         final whiteRook =
             Figure(type: FigureType.rook, color: FigureColor.white);
 
         final moves =
             moveController.getRookMoves(rookPosition, whiteRook, deck);
 
-        // Только три направления доступны (нет движения влево)
         final expectedMoves = [
-          // Вправо
           FigurePosition(1, 4), FigurePosition(2, 4), FigurePosition(3, 4),
           FigurePosition(4, 4), FigurePosition(5, 4), FigurePosition(6, 4),
           FigurePosition(7, 4),
-          // Вверх
           FigurePosition(0, 5), FigurePosition(0, 6), FigurePosition(0, 7),
-          // Вниз
           FigurePosition(0, 3), FigurePosition(0, 2), FigurePosition(0, 1),
           FigurePosition(0, 0),
         ];
@@ -871,10 +832,10 @@ void main() {
             moveController.getRookMoves(rookPosition, blackRook, deck);
 
         expect(moves.length, equals(14));
-        expect(moves, contains(FigurePosition(5, 4))); // вправо
-        expect(moves, contains(FigurePosition(3, 4))); // влево
-        expect(moves, contains(FigurePosition(4, 5))); // вверх
-        expect(moves, contains(FigurePosition(4, 3))); // вниз
+        expect(moves, contains(FigurePosition(5, 4)));
+        expect(moves, contains(FigurePosition(3, 4)));
+        expect(moves, contains(FigurePosition(4, 5)));
+        expect(moves, contains(FigurePosition(4, 3)));
       });
 
       test('ладья должна корректно обрабатывать смешанные ситуации', () {
@@ -883,9 +844,9 @@ void main() {
         final enemyPawn =
             Figure(type: FigureType.pawn, color: FigureColor.black);
         final deck = Deck(deckMatrix: {
-          FigurePosition(6, 4): allyPawn, // блокирует движение вправо
-          FigurePosition(2, 4): enemyPawn, // атакует влево
-          FigurePosition(4, 6): enemyPawn, // атакует вверх
+          FigurePosition(6, 4): allyPawn,
+          FigurePosition(2, 4): enemyPawn,
+          FigurePosition(4, 6): enemyPawn,
         });
         final rookPosition = FigurePosition(4, 4);
         final whiteRook =
@@ -894,19 +855,15 @@ void main() {
         final moves =
             moveController.getRookMoves(rookPosition, whiteRook, deck);
 
-        // Может атаковать врагов
         expect(moves, contains(FigurePosition(2, 4)));
         expect(moves, contains(FigurePosition(4, 6)));
 
-        // Не может атаковать союзника
         expect(moves, isNot(contains(FigurePosition(6, 4))));
 
-        // Не может идти дальше блокирующих фигур
         expect(moves, isNot(contains(FigurePosition(7, 4))));
         expect(moves, isNot(contains(FigurePosition(1, 4))));
         expect(moves, isNot(contains(FigurePosition(4, 7))));
 
-        // Может идти до блокировки
         expect(moves, contains(FigurePosition(5, 4)));
         expect(moves, contains(FigurePosition(3, 4)));
         expect(moves, contains(FigurePosition(4, 5)));
@@ -921,7 +878,6 @@ void main() {
         final moves =
             moveController.getRookMoves(rookPosition, whiteRook, deck);
 
-        // Проверяем, что все ходы в пределах доски
         for (final move in moves) {
           expect(move.x, greaterThanOrEqualTo(0));
           expect(move.y, greaterThanOrEqualTo(0));
@@ -941,16 +897,15 @@ void main() {
         final moves =
             moveController.getRookMoves(rookPosition, whiteRook, deck);
 
-        // Проверяем количество ходов по каждому направлению
         final right = moves.where((m) => m.x > 3 && m.y == 3).length;
         final left = moves.where((m) => m.x < 3 && m.y == 3).length;
         final up = moves.where((m) => m.x == 3 && m.y > 3).length;
         final down = moves.where((m) => m.x == 3 && m.y < 3).length;
 
-        expect(right, equals(4)); // до (7,3)
-        expect(left, equals(3)); // до (0,3)
-        expect(up, equals(4)); // до (3,7)
-        expect(down, equals(3)); // до (3,0)
+        expect(right, equals(4));
+        expect(left, equals(3));
+        expect(up, equals(4));
+        expect(down, equals(3));
         expect(moves.length, equals(14));
       });
 
@@ -963,14 +918,12 @@ void main() {
         final moves =
             moveController.getRookMoves(rookPosition, whiteRook, deck);
 
-        // Проверяем, что есть ходы во всех доступных направлениях
-        expect(moves, contains(FigurePosition(0, 6))); // влево
-        expect(moves, contains(FigurePosition(7, 6))); // вправо
-        expect(moves, contains(FigurePosition(2, 0))); // вниз
-        expect(moves, contains(FigurePosition(2, 7))); // вверх
+        expect(moves, contains(FigurePosition(0, 6)));
+        expect(moves, contains(FigurePosition(7, 6)));
+        expect(moves, contains(FigurePosition(2, 0)));
+        expect(moves, contains(FigurePosition(2, 7)));
 
-        // Общее количество ходов
-        expect(moves.length, equals(14)); // 2+5+6+1 = 14 ходов
+        expect(moves.length, equals(14));
       });
     });
 
@@ -986,29 +939,25 @@ void main() {
         final moves =
             moveController.getQueenMoves(queenPosition, whiteQueen, deck);
 
-        // Проверяем все 8 направлений (горизонталь + вертикаль + диагонали)
         final expectedMoves = [
-          // Горизонталь и вертикаль (как ладья)
           FigurePosition(5, 4), FigurePosition(6, 4),
-          FigurePosition(7, 4), // вправо
+          FigurePosition(7, 4),
           FigurePosition(3, 4), FigurePosition(2, 4), FigurePosition(1, 4),
-          FigurePosition(0, 4), // влево
+          FigurePosition(0, 4),
           FigurePosition(4, 5), FigurePosition(4, 6),
-          FigurePosition(4, 7), // вверх
+          FigurePosition(4, 7),
           FigurePosition(4, 3), FigurePosition(4, 2), FigurePosition(4, 1),
-          FigurePosition(4, 0), // вниз
-          // Диагонали (как слон)
-          FigurePosition(5, 5), FigurePosition(6, 6),
-          FigurePosition(7, 7), // верхняя правая
+          FigurePosition(4, 0),
+          FigurePosition(5, 5), FigurePosition(6, 6), FigurePosition(7, 7),
           FigurePosition(3, 5), FigurePosition(2, 6),
-          FigurePosition(1, 7), // верхняя левая
+          FigurePosition(1, 7),
           FigurePosition(5, 3), FigurePosition(6, 2),
-          FigurePosition(7, 1), // нижняя правая
+          FigurePosition(7, 1),
           FigurePosition(3, 3), FigurePosition(2, 2), FigurePosition(1, 1),
-          FigurePosition(0, 0), // нижняя левая
+          FigurePosition(0, 0),
         ];
 
-        expect(moves.length, equals(27)); // 14 (ладья) + 13 (слон) = 27 ходов
+        expect(moves.length, equals(27));
         for (final expectedMove in expectedMoves) {
           expect(moves, contains(expectedMove));
         }
@@ -1020,10 +969,10 @@ void main() {
         final enemyPawn =
             Figure(type: FigureType.pawn, color: FigureColor.black);
         final deck = Deck(deckMatrix: {
-          FigurePosition(6, 4): enemyPawn, // блокирует горизонтальное движение
-          FigurePosition(4, 6): enemyPawn, // блокирует вертикальное движение
-          FigurePosition(6, 6): enemyPawn, // блокирует диагональное движение
-          FigurePosition(2, 2): enemyPawn, // блокирует другую диагональ
+          FigurePosition(6, 4): enemyPawn,
+          FigurePosition(4, 6): enemyPawn,
+          FigurePosition(6, 6): enemyPawn,
+          FigurePosition(2, 2): enemyPawn,
         });
         final queenPosition = FigurePosition(4, 4);
         final whiteQueen =
@@ -1032,13 +981,11 @@ void main() {
         final moves =
             moveController.getQueenMoves(queenPosition, whiteQueen, deck);
 
-        // Должна атаковать всех врагов
         expect(moves, contains(FigurePosition(6, 4)));
         expect(moves, contains(FigurePosition(4, 6)));
         expect(moves, contains(FigurePosition(6, 6)));
         expect(moves, contains(FigurePosition(2, 2)));
 
-        // Но не должна идти дальше них
         expect(moves, isNot(contains(FigurePosition(7, 4))));
         expect(moves, isNot(contains(FigurePosition(4, 7))));
         expect(moves, isNot(contains(FigurePosition(7, 7))));
@@ -1051,10 +998,10 @@ void main() {
         final allyPawn =
             Figure(type: FigureType.pawn, color: FigureColor.white);
         final deck = Deck(deckMatrix: {
-          FigurePosition(6, 4): allyPawn, // блокирует горизонтальное движение
-          FigurePosition(4, 6): allyPawn, // блокирует вертикальное движение
-          FigurePosition(6, 6): allyPawn, // блокирует диагональное движение
-          FigurePosition(2, 2): allyPawn, // блокирует другую диагональ
+          FigurePosition(6, 4): allyPawn,
+          FigurePosition(4, 6): allyPawn,
+          FigurePosition(6, 6): allyPawn,
+          FigurePosition(2, 2): allyPawn,
         });
         final queenPosition = FigurePosition(4, 4);
         final whiteQueen =
@@ -1063,13 +1010,11 @@ void main() {
         final moves =
             moveController.getQueenMoves(queenPosition, whiteQueen, deck);
 
-        // Не должна атаковать союзников
         expect(moves, isNot(contains(FigurePosition(6, 4))));
         expect(moves, isNot(contains(FigurePosition(4, 6))));
         expect(moves, isNot(contains(FigurePosition(6, 6))));
         expect(moves, isNot(contains(FigurePosition(2, 2))));
 
-        // Но может идти до них
         expect(moves, contains(FigurePosition(5, 4)));
         expect(moves, contains(FigurePosition(4, 5)));
         expect(moves, contains(FigurePosition(5, 5)));
@@ -1079,7 +1024,7 @@ void main() {
       test('ферзь в углу доски должен двигаться только по трем направлениям',
           () {
         final deck = Deck(deckMatrix: {});
-        final queenPosition = FigurePosition(0, 0); // левый верхний угол
+        final queenPosition = FigurePosition(0, 0);
         final whiteQueen =
             Figure(type: FigureType.queen, color: FigureColor.white);
 
@@ -1087,21 +1032,18 @@ void main() {
             moveController.getQueenMoves(queenPosition, whiteQueen, deck);
 
         final expectedMoves = [
-          // Вправо
           FigurePosition(1, 0), FigurePosition(2, 0), FigurePosition(3, 0),
           FigurePosition(4, 0), FigurePosition(5, 0), FigurePosition(6, 0),
           FigurePosition(7, 0),
-          // Вверх
           FigurePosition(0, 1), FigurePosition(0, 2), FigurePosition(0, 3),
           FigurePosition(0, 4), FigurePosition(0, 5), FigurePosition(0, 6),
           FigurePosition(0, 7),
-          // Диагональ вправо-вверх
           FigurePosition(1, 1), FigurePosition(2, 2), FigurePosition(3, 3),
           FigurePosition(4, 4), FigurePosition(5, 5), FigurePosition(6, 6),
           FigurePosition(7, 7),
         ];
 
-        expect(moves.length, equals(21)); // 7+7+7 = 21 ход
+          expect(moves.length, equals(21));
         for (final expectedMove in expectedMoves) {
           expect(moves, contains(expectedMove));
         }
@@ -1117,11 +1059,10 @@ void main() {
             moveController.getQueenMoves(queenPosition, blackQueen, deck);
 
         expect(moves.length, equals(27));
-        // Проверяем все направления
-        expect(moves, contains(FigurePosition(5, 4))); // горизонталь
-        expect(moves, contains(FigurePosition(4, 5))); // вертикаль
-        expect(moves, contains(FigurePosition(5, 5))); // диагональ
-        expect(moves, contains(FigurePosition(3, 3))); // обратная диагональ
+        expect(moves, contains(FigurePosition(5, 4)));
+        expect(moves, contains(FigurePosition(4, 5)));
+        expect(moves, contains(FigurePosition(5, 5)));
+        expect(moves, contains(FigurePosition(3, 3)));
       });
 
       test('ферзь должна быть самой мощной фигурой по количеству ходов', () {
@@ -1137,12 +1078,11 @@ void main() {
         final knightMoves = moveController.getKnightMoves(position,
             Figure(type: FigureType.knight, color: FigureColor.white), deck);
 
-        // Ферзь должен иметь больше ходов чем любая другая фигура
         expect(queenMoves.length, greaterThan(rookMoves.length));
         expect(queenMoves.length, greaterThan(bishopMoves.length));
         expect(queenMoves.length, greaterThan(knightMoves.length));
         expect(
-            queenMoves.length, equals(27)); // максимум для центральной позиции
+            queenMoves.length, equals(27));
       });
 
       test('ферзь не должен выходить за границы доски', () {
@@ -1154,7 +1094,6 @@ void main() {
         final moves =
             moveController.getQueenMoves(queenPosition, whiteQueen, deck);
 
-        // Проверяем, что все ходы в пределах доски
         for (final move in moves) {
           expect(move.x, greaterThanOrEqualTo(0));
           expect(move.y, greaterThanOrEqualTo(0));
@@ -1175,18 +1114,15 @@ void main() {
         final moves =
             moveController.getKingMoves(kingPosition, whiteKing, deck);
 
-        // Проверяем все 8 направлений на 1 клетку
         final expectedMoves = [
-          // Горизонталь и вертикаль
-          FigurePosition(5, 4), // вправо
-          FigurePosition(3, 4), // влево
-          FigurePosition(4, 5), // вверх
-          FigurePosition(4, 3), // вниз
-          // Диагонали
-          FigurePosition(5, 5), // вправо-вверх
-          FigurePosition(3, 5), // влево-вверх
-          FigurePosition(5, 3), // вправо-вниз
-          FigurePosition(3, 3), // влево-вниз
+          FigurePosition(5, 4),
+          FigurePosition(3, 4),
+          FigurePosition(4, 5),
+          FigurePosition(4, 3),
+          FigurePosition(5, 5),
+          FigurePosition(3, 5),
+          FigurePosition(5, 3),
+          FigurePosition(3, 3),
         ];
 
         expect(moves.length, equals(8));
@@ -1199,9 +1135,9 @@ void main() {
         final enemyPawn =
             Figure(type: FigureType.pawn, color: FigureColor.black);
         final deck = Deck(deckMatrix: {
-          FigurePosition(5, 4): enemyPawn, // справа
-          FigurePosition(4, 5): enemyPawn, // сверху
-          FigurePosition(5, 5): enemyPawn, // по диагонали
+          FigurePosition(5, 4): enemyPawn,
+          FigurePosition(4, 5): enemyPawn,
+          FigurePosition(5, 5): enemyPawn,
         });
         final kingPosition = FigurePosition(4, 4);
         final whiteKing =
@@ -1210,24 +1146,22 @@ void main() {
         final moves =
             moveController.getKingMoves(kingPosition, whiteKing, deck);
 
-        // Должен атаковать всех врагов
         expect(moves, contains(FigurePosition(5, 4)));
         expect(moves, contains(FigurePosition(4, 5)));
         expect(moves, contains(FigurePosition(5, 5)));
 
-        // И иметь свободные ходы в других направлениях
         expect(moves, contains(FigurePosition(3, 4)));
         expect(moves, contains(FigurePosition(4, 3)));
-        expect(moves.length, equals(8)); // все 8 ходов доступны
+        expect(moves.length, equals(8));
       });
 
       test('король не должен атаковать союзные фигуры', () {
         final allyPawn =
             Figure(type: FigureType.pawn, color: FigureColor.white);
         final deck = Deck(deckMatrix: {
-          FigurePosition(5, 4): allyPawn, // справа
-          FigurePosition(4, 5): allyPawn, // сверху
-          FigurePosition(5, 5): allyPawn, // по диагонали
+          FigurePosition(5, 4): allyPawn,
+          FigurePosition(4, 5): allyPawn,
+          FigurePosition(5, 5): allyPawn,
         });
         final kingPosition = FigurePosition(4, 4);
         final whiteKing =
@@ -1236,23 +1170,21 @@ void main() {
         final moves =
             moveController.getKingMoves(kingPosition, whiteKing, deck);
 
-        // Не должен атаковать союзников
         expect(moves, isNot(contains(FigurePosition(5, 4))));
         expect(moves, isNot(contains(FigurePosition(4, 5))));
         expect(moves, isNot(contains(FigurePosition(5, 5))));
 
-        // Но может ходить в свободные направления
         expect(moves, contains(FigurePosition(3, 4)));
         expect(moves, contains(FigurePosition(4, 3)));
         expect(moves, contains(FigurePosition(3, 5)));
         expect(moves, contains(FigurePosition(5, 3)));
         expect(moves, contains(FigurePosition(3, 3)));
-        expect(moves.length, equals(5)); // только 5 свободных ходов
+        expect(moves.length, equals(5));
       });
 
       test('король в углу доски должен иметь только 3 возможных хода', () {
         final deck = Deck(deckMatrix: {});
-        final kingPosition = FigurePosition(0, 0); // левый верхний угол
+        final kingPosition = FigurePosition(0, 0);
         final whiteKing =
             Figure(type: FigureType.king, color: FigureColor.white);
 
@@ -1260,9 +1192,9 @@ void main() {
             moveController.getKingMoves(kingPosition, whiteKing, deck);
 
         final expectedMoves = [
-          FigurePosition(1, 0), // вправо
-          FigurePosition(0, 1), // вверх
-          FigurePosition(1, 1), // диагональ вправо-вверх
+          FigurePosition(1, 0),
+          FigurePosition(0, 1),
+          FigurePosition(1, 1),
         ];
 
         expect(moves.length, equals(3));
@@ -1274,7 +1206,7 @@ void main() {
       test('король в противоположном углу должен иметь только 3 возможных хода',
           () {
         final deck = Deck(deckMatrix: {});
-        final kingPosition = FigurePosition(7, 7); // правый нижний угол
+        final kingPosition = FigurePosition(7, 7);
         final whiteKing =
             Figure(type: FigureType.king, color: FigureColor.white);
 
@@ -1282,9 +1214,9 @@ void main() {
             moveController.getKingMoves(kingPosition, whiteKing, deck);
 
         final expectedMoves = [
-          FigurePosition(6, 7), // влево
-          FigurePosition(7, 6), // вниз
-          FigurePosition(6, 6), // диагональ влево-вниз
+          FigurePosition(6, 7),
+          FigurePosition(7, 6),
+          FigurePosition(6, 6),
         ];
 
         expect(moves.length, equals(3));
@@ -1295,7 +1227,7 @@ void main() {
 
       test('король на краю доски должен иметь ограниченные ходы', () {
         final deck = Deck(deckMatrix: {});
-        final kingPosition = FigurePosition(0, 4); // левый край
+        final kingPosition = FigurePosition(0, 4);
         final whiteKing =
             Figure(type: FigureType.king, color: FigureColor.white);
 
@@ -1303,11 +1235,11 @@ void main() {
             moveController.getKingMoves(kingPosition, whiteKing, deck);
 
         final expectedMoves = [
-          FigurePosition(1, 4), // вправо
-          FigurePosition(0, 5), // вверх
-          FigurePosition(0, 3), // вниз
-          FigurePosition(1, 5), // диагональ вправо-вверх
-          FigurePosition(1, 3), // диагональ вправо-вниз
+          FigurePosition(1, 4),
+          FigurePosition(0, 5),
+          FigurePosition(0, 3),
+          FigurePosition(1, 5),
+          FigurePosition(1, 3),
         ];
 
         expect(moves.length, equals(5));
@@ -1326,11 +1258,11 @@ void main() {
             moveController.getKingMoves(kingPosition, blackKing, deck);
 
         expect(moves.length, equals(8));
-        expect(moves, contains(FigurePosition(5, 4))); // вправо
-        expect(moves, contains(FigurePosition(3, 4))); // влево
-        expect(moves, contains(FigurePosition(4, 5))); // вверх
-        expect(moves, contains(FigurePosition(4, 3))); // вниз
-        expect(moves, contains(FigurePosition(5, 5))); // диагонали
+              expect(moves, contains(FigurePosition(5, 4)));
+        expect(moves, contains(FigurePosition(3, 4)));
+        expect(moves, contains(FigurePosition(4, 5)));
+        expect(moves, contains(FigurePosition(4, 3)));
+        expect(moves, contains(FigurePosition(5, 5)));
       });
 
       test('король должен корректно обрабатывать смешанные ситуации', () {
@@ -1339,10 +1271,10 @@ void main() {
         final enemyPawn =
             Figure(type: FigureType.pawn, color: FigureColor.black);
         final deck = Deck(deckMatrix: {
-          FigurePosition(5, 4): allyPawn, // союзник справа
-          FigurePosition(4, 5): enemyPawn, // враг сверху
-          FigurePosition(3, 4): allyPawn, // союзник слева
-          FigurePosition(5, 5): enemyPawn, // враг по диагонали
+          FigurePosition(5, 4): allyPawn,
+          FigurePosition(4, 5): enemyPawn,
+          FigurePosition(3, 4): allyPawn,
+          FigurePosition(5, 5): enemyPawn,
         });
         final kingPosition = FigurePosition(4, 4);
         final whiteKing =
@@ -1351,21 +1283,18 @@ void main() {
         final moves =
             moveController.getKingMoves(kingPosition, whiteKing, deck);
 
-        // Может атаковать врагов
         expect(moves, contains(FigurePosition(4, 5)));
         expect(moves, contains(FigurePosition(5, 5)));
 
-        // Не может атаковать союзников
         expect(moves, isNot(contains(FigurePosition(5, 4))));
         expect(moves, isNot(contains(FigurePosition(3, 4))));
 
-        // Может ходить в свободные клетки
         expect(moves, contains(FigurePosition(4, 3)));
         expect(moves, contains(FigurePosition(3, 5)));
         expect(moves, contains(FigurePosition(5, 3)));
         expect(moves, contains(FigurePosition(3, 3)));
 
-        expect(moves.length, equals(6)); // 2 атаки + 4 свободных хода
+        expect(moves.length, equals(6));
       });
 
       test('король не должен выходить за границы доски', () {
@@ -1377,7 +1306,6 @@ void main() {
         final moves =
             moveController.getKingMoves(kingPosition, whiteKing, deck);
 
-        // Проверяем, что все ходы в пределах доски
         for (final move in moves) {
           expect(move.x, greaterThanOrEqualTo(0));
           expect(move.y, greaterThanOrEqualTo(0));
@@ -1385,7 +1313,7 @@ void main() {
           expect(move.y, lessThanOrEqualTo(7));
         }
 
-        expect(moves.length, equals(8)); // все 8 ходов доступны с позиции (1,1)
+        expect(moves.length, equals(8));
       });
 
       test('король должен иметь ровно 8 ходов с центра пустой доски', () {
@@ -1397,15 +1325,13 @@ void main() {
         final moves =
             moveController.getKingMoves(kingPosition, whiteKing, deck);
 
-        // Король всегда делает только 1 шаг, поэтому максимум 8 ходов
         expect(moves.length, equals(8));
 
-        // Проверяем, что есть ходы во всех направлениях
-        expect(moves, contains(FigurePosition(4, 3))); // вправо
-        expect(moves, contains(FigurePosition(2, 3))); // влево
-        expect(moves, contains(FigurePosition(3, 4))); // вверх
-        expect(moves, contains(FigurePosition(3, 2))); // вниз
-        expect(moves, contains(FigurePosition(4, 4))); // диагонали
+        expect(moves, contains(FigurePosition(4, 3)));
+        expect(moves, contains(FigurePosition(2, 3)));
+        expect(moves, contains(FigurePosition(3, 4)));
+        expect(moves, contains(FigurePosition(3, 2)));
+        expect(moves, contains(FigurePosition(4, 4)));
         expect(moves, contains(FigurePosition(2, 4)));
         expect(moves, contains(FigurePosition(4, 2)));
         expect(moves, contains(FigurePosition(2, 2)));
@@ -1415,11 +1341,11 @@ void main() {
         final allyPawn =
             Figure(type: FigureType.pawn, color: FigureColor.white);
         final deck = Deck(deckMatrix: {
-          FigurePosition(5, 4): allyPawn, // справа
-          FigurePosition(3, 4): allyPawn, // слева
-          FigurePosition(4, 5): allyPawn, // сверху
-          FigurePosition(4, 3): allyPawn, // снизу
-          FigurePosition(5, 5): allyPawn, // диагонали
+          FigurePosition(5, 4): allyPawn,
+          FigurePosition(3, 4): allyPawn,
+          FigurePosition(4, 5): allyPawn,
+          FigurePosition(4, 3): allyPawn,
+          FigurePosition(5, 5): allyPawn,
           FigurePosition(3, 5): allyPawn,
           FigurePosition(5, 3): allyPawn,
           FigurePosition(3, 3): allyPawn,
@@ -1431,7 +1357,7 @@ void main() {
         final moves =
             moveController.getKingMoves(kingPosition, whiteKing, deck);
 
-        expect(moves, isEmpty); // нет доступных ходов
+        expect(moves, isEmpty);
       });
     });
 
@@ -1443,7 +1369,7 @@ void main() {
             Figure(type: FigureType.rook, color: FigureColor.black);
         final deck = Deck(deckMatrix: {
           FigurePosition(4, 4): whiteKing,
-          FigurePosition(4, 0): blackRook, // ладья атакует по вертикали
+          FigurePosition(4, 0): blackRook,
         });
 
         final isInCheck = moveController.isKingInCheck(FigureColor.white, deck);
@@ -1457,7 +1383,7 @@ void main() {
             Figure(type: FigureType.rook, color: FigureColor.black);
         final deck = Deck(deckMatrix: {
           FigurePosition(4, 4): whiteKing,
-          FigurePosition(0, 0): blackRook, // ладья не атакует короля
+          FigurePosition(0, 0): blackRook,
         });
 
         final isInCheck = moveController.isKingInCheck(FigureColor.white, deck);
@@ -1469,7 +1395,7 @@ void main() {
         final whiteQueen = Figure(type: FigureType.queen, color: FigureColor.white);
         final deck = Deck(deckMatrix: {
           FigurePosition(4, 4): blackKing,
-          FigurePosition(4, 0): whiteQueen, // ферзь атакует по вертикали
+          FigurePosition(4, 0): whiteQueen,
         });
 
         final isInCheck = moveController.isKingInCheck(FigureColor.black, deck);
@@ -1481,7 +1407,7 @@ void main() {
         final blackPawn = Figure(type: FigureType.pawn, color: FigureColor.black);
         final deck = Deck(deckMatrix: {
           FigurePosition(4, 4): whiteKing,
-          FigurePosition(3, 3): blackPawn, // черная пешка атакует вниз-вправо (3,3) -> (4,4)
+          FigurePosition(3, 3): blackPawn,
         });
 
         final isInCheck = moveController.isKingInCheck(FigureColor.white, deck);
@@ -1493,7 +1419,7 @@ void main() {
         final blackPawn = Figure(type: FigureType.pawn, color: FigureColor.black);
         final deck = Deck(deckMatrix: {
           FigurePosition(4, 4): whiteKing,
-          FigurePosition(5, 3): blackPawn, // черная пешка атакует вниз-влево (5,3) -> (4,4)
+          FigurePosition(5, 3): blackPawn,
         });
 
         final isInCheck = moveController.isKingInCheck(FigureColor.white, deck);
@@ -1505,7 +1431,7 @@ void main() {
         final blackPawn = Figure(type: FigureType.pawn, color: FigureColor.black);
         final deck = Deck(deckMatrix: {
           FigurePosition(4, 4): whiteKing,
-          FigurePosition(3, 5): blackPawn, // черная пешка не может атаковать назад вверх
+          FigurePosition(3, 5): blackPawn,
         });
 
         final isInCheck = moveController.isKingInCheck(FigureColor.white, deck);
@@ -1517,7 +1443,7 @@ void main() {
         final whitePawn = Figure(type: FigureType.pawn, color: FigureColor.white);
         final deck = Deck(deckMatrix: {
           FigurePosition(4, 4): blackKing,
-          FigurePosition(3, 5): whitePawn, // белая пешка атакует вверх-вправо (3,5) -> (4,4)
+              FigurePosition(3, 5): whitePawn,
         });
 
         final isInCheck = moveController.isKingInCheck(FigureColor.black, deck);
@@ -1529,7 +1455,7 @@ void main() {
         final blackKnight = Figure(type: FigureType.knight, color: FigureColor.black);
         final deck = Deck(deckMatrix: {
           FigurePosition(4, 4): whiteKing,
-          FigurePosition(6, 5): blackKnight, // конь атакует L-ходом
+          FigurePosition(6, 5): blackKnight,
         });
 
         final isInCheck = moveController.isKingInCheck(FigureColor.white, deck);
@@ -1541,7 +1467,7 @@ void main() {
         final blackBishop = Figure(type: FigureType.bishop, color: FigureColor.black);
         final deck = Deck(deckMatrix: {
           FigurePosition(4, 4): whiteKing,
-          FigurePosition(7, 7): blackBishop, // слон атакует по диагонали
+          FigurePosition(7, 7): blackBishop,
         });
 
         final isInCheck = moveController.isKingInCheck(FigureColor.white, deck);
@@ -1553,7 +1479,7 @@ void main() {
         final blackQueen = Figure(type: FigureType.queen, color: FigureColor.black);
         final deck = Deck(deckMatrix: {
           FigurePosition(4, 4): whiteKing,
-          FigurePosition(0, 4): blackQueen, // ферзь атакует по горизонтали
+          FigurePosition(0, 4): blackQueen,
         });
 
         final isInCheck = moveController.isKingInCheck(FigureColor.white, deck);
@@ -1565,7 +1491,7 @@ void main() {
         final blackQueen = Figure(type: FigureType.queen, color: FigureColor.black);
         final deck = Deck(deckMatrix: {
           FigurePosition(4, 4): whiteKing,
-          FigurePosition(1, 1): blackQueen, // ферзь атакует по диагонали
+          FigurePosition(1, 1): blackQueen,
         });
 
         final isInCheck = moveController.isKingInCheck(FigureColor.white, deck);
@@ -1578,8 +1504,8 @@ void main() {
         final blackRook = Figure(type: FigureType.rook, color: FigureColor.black);
         final deck = Deck(deckMatrix: {
           FigurePosition(4, 4): whiteKing,
-          FigurePosition(4, 3): whitePawn, // союзная пешка блокирует
-          FigurePosition(4, 0): blackRook, // ладья не может атаковать
+          FigurePosition(4, 3): whitePawn,
+          FigurePosition(4, 0): blackRook,
         });
 
         final isInCheck = moveController.isKingInCheck(FigureColor.white, deck);
@@ -1592,8 +1518,8 @@ void main() {
         final blackRook = Figure(type: FigureType.rook, color: FigureColor.black);
         final deck = Deck(deckMatrix: {
           FigurePosition(4, 4): whiteKing,
-          FigurePosition(4, 2): blackPawn, // вражеская пешка блокирует
-          FigurePosition(4, 0): blackRook, // ладья не может атаковать через пешку
+          FigurePosition(4, 2): blackPawn,
+          FigurePosition(4, 0): blackRook,
         });
 
         final isInCheck = moveController.isKingInCheck(FigureColor.white, deck);
@@ -1606,12 +1532,12 @@ void main() {
         final blackBishop = Figure(type: FigureType.bishop, color: FigureColor.black);
         final deck = Deck(deckMatrix: {
           FigurePosition(4, 4): whiteKing,
-          FigurePosition(4, 0): blackRook, // ладья атакует по вертикали
-          FigurePosition(7, 7): blackBishop, // слон атакует по диагонали
+          FigurePosition(4, 0): blackRook,
+          FigurePosition(7, 7): blackBishop,
         });
 
         final isInCheck = moveController.isKingInCheck(FigureColor.white, deck);
-        expect(isInCheck, isTrue); // достаточно одной атакующей фигуры
+        expect(isInCheck, isTrue);
       });
 
       test('не должен определять шах от союзных фигур', () {
@@ -1620,8 +1546,8 @@ void main() {
         final whiteQueen = Figure(type: FigureType.queen, color: FigureColor.white);
         final deck = Deck(deckMatrix: {
           FigurePosition(4, 4): whiteKing,
-          FigurePosition(4, 0): whiteRook, // союзная ладья
-          FigurePosition(0, 4): whiteQueen, // союзный ферзь
+          FigurePosition(4, 0): whiteRook,
+          FigurePosition(0, 4): whiteQueen,
         });
 
         final isInCheck = moveController.isKingInCheck(FigureColor.white, deck);
@@ -1632,8 +1558,8 @@ void main() {
         final whiteKing = Figure(type: FigureType.king, color: FigureColor.white);
         final blackRook = Figure(type: FigureType.rook, color: FigureColor.black);
         final deck = Deck(deckMatrix: {
-          FigurePosition(0, 0): whiteKing, // король в углу
-          FigurePosition(0, 7): blackRook, // ладья атакует по вертикали
+          FigurePosition(0, 0): whiteKing,
+          FigurePosition(0, 7): blackRook,
         });
 
         final isInCheck = moveController.isKingInCheck(FigureColor.white, deck);
@@ -1651,8 +1577,8 @@ void main() {
         final attackedSquares = moveController.getAttackedSquares(pawnPosition, blackPawn, deck);
 
         expect(attackedSquares.length, equals(2));
-        expect(attackedSquares, contains(FigurePosition(3, 5))); // влево-вниз (y+1)
-        expect(attackedSquares, contains(FigurePosition(5, 5))); // вправо-вниз (y+1)
+        expect(attackedSquares, contains(FigurePosition(3, 5)));
+        expect(attackedSquares, contains(FigurePosition(5, 5)));
       });
 
       test('белая пешка должна атаковать вверх по диагонали', () {
@@ -1663,19 +1589,19 @@ void main() {
         final attackedSquares = moveController.getAttackedSquares(pawnPosition, whitePawn, deck);
 
         expect(attackedSquares.length, equals(2));
-        expect(attackedSquares, contains(FigurePosition(3, 3))); // влево-вверх (y-1)
-        expect(attackedSquares, contains(FigurePosition(5, 3))); // вправо-вверх (y-1)
+              expect(attackedSquares, contains(FigurePosition(3, 3)));
+        expect(attackedSquares, contains(FigurePosition(5, 3)));
       });
 
       test('пешка на краю доски должна атаковать только доступные клетки', () {
         final deck = Deck(deckMatrix: {});
         final blackPawn = Figure(type: FigureType.pawn, color: FigureColor.black);
-        final pawnPosition = FigurePosition(0, 4); // левый край
+        final pawnPosition = FigurePosition(0, 4);
 
         final attackedSquares = moveController.getAttackedSquares(pawnPosition, blackPawn, deck);
 
         expect(attackedSquares.length, equals(1));
-        expect(attackedSquares, contains(FigurePosition(1, 5))); // только вправо-вниз (y+1)
+          expect(attackedSquares, contains(FigurePosition(1, 5)));
       });
 
       test('ладья должна иметь те же атакуемые клетки что и ходы', () {
@@ -1724,7 +1650,7 @@ void main() {
         final deck = Deck(deckMatrix: {});
 
         final isInCheck = moveController.isKingInCheck(FigureColor.white, deck);
-        expect(isInCheck, isFalse); // нет короля - нет шаха
+        expect(isInCheck, isFalse);
       });
 
       test('должен определять шах в сложной позиции с множеством фигур', () {
@@ -1737,11 +1663,11 @@ void main() {
         
         final deck = Deck(deckMatrix: {
           FigurePosition(4, 4): whiteKing,
-          FigurePosition(3, 3): whitePawn1, // защищает от слева-снизу
-          FigurePosition(5, 3): whitePawn2, // защищает справа-снизу
-          FigurePosition(1, 1): blackQueen, // не может атаковать (блокирована пешкой)
-          FigurePosition(6, 6): blackKnight, // не может атаковать (неправильная позиция)
-          FigurePosition(4, 6): blackPawn, // может атаковать по вертикали? Нет, пешки так не ходят
+          FigurePosition(3, 3): whitePawn1,
+          FigurePosition(5, 3): whitePawn2,
+          FigurePosition(1, 1): blackQueen,
+          FigurePosition(6, 6): blackKnight,
+          FigurePosition(4, 6): blackPawn,
         });
 
         final isInCheck = moveController.isKingInCheck(FigureColor.white, deck);
@@ -1753,7 +1679,7 @@ void main() {
         final blackKing = Figure(type: FigureType.king, color: FigureColor.black);
         final deck = Deck(deckMatrix: {
           FigurePosition(4, 4): whiteKing,
-          FigurePosition(4, 5): blackKing, // короли рядом - взаимный шах
+          FigurePosition(4, 5): blackKing,
         });
 
         final whiteInCheck = moveController.isKingInCheck(FigureColor.white, deck);
@@ -1770,10 +1696,10 @@ void main() {
         final blackKnight = Figure(type: FigureType.knight, color: FigureColor.black);
         
         final deck = Deck(deckMatrix: {
-          FigurePosition(4, 4): whiteKing, // в центре
-          FigurePosition(0, 0): blackRook, // в углу, не атакует
-          FigurePosition(1, 0): blackBishop, // не на диагонали
-          FigurePosition(0, 1): blackKnight, // слишком далеко для L-хода
+          FigurePosition(4, 4): whiteKing,
+          FigurePosition(0, 0): blackRook,
+          FigurePosition(1, 0): blackBishop,
+          FigurePosition(0, 1): blackKnight,
         });
 
         final isInCheck = moveController.isKingInCheck(FigureColor.white, deck);
@@ -1784,8 +1710,8 @@ void main() {
         final whiteKing = Figure(type: FigureType.king, color: FigureColor.white);
         final blackRook = Figure(type: FigureType.rook, color: FigureColor.black);
         final deck = Deck(deckMatrix: {
-          FigurePosition(7, 7): whiteKing, // в углу
-          FigurePosition(7, 0): blackRook, // ладья атакует через всю вертикаль
+          FigurePosition(7, 7): whiteKing,
+          FigurePosition(7, 0): blackRook,
         });
 
         final isInCheck = moveController.isKingInCheck(FigureColor.white, deck);
@@ -1799,18 +1725,16 @@ void main() {
         final blackRook = Figure(type: FigureType.rook, color: FigureColor.black);
         final deck = Deck(deckMatrix: {
           FigurePosition(4, 4): whiteKing,
-          FigurePosition(0, 5): blackRook, // ладья контролирует 5-ю горизонталь
+          FigurePosition(0, 5): blackRook,
         });
 
         final moves = moveController.calculatePossibleMoves(
             FigurePosition(4, 4), whiteKing, deck);
 
-        // Король не может идти на 5-ю горизонталь
         expect(moves, isNot(contains(FigurePosition(4, 5))));
         expect(moves, isNot(contains(FigurePosition(3, 5))));
         expect(moves, isNot(contains(FigurePosition(5, 5))));
         
-        // Но может идти в безопасные места
         expect(moves, contains(FigurePosition(4, 3)));
         expect(moves, contains(FigurePosition(3, 3)));
         expect(moves, contains(FigurePosition(5, 3)));
@@ -1822,16 +1746,14 @@ void main() {
         final blackRook = Figure(type: FigureType.rook, color: FigureColor.black);
         final deck = Deck(deckMatrix: {
           FigurePosition(4, 4): whiteKing,
-          FigurePosition(4, 3): whitePawn, // пешка защищает короля от ладьи
-          FigurePosition(4, 0): blackRook, // ладья на той же вертикали
+          FigurePosition(4, 3): whitePawn,
+          FigurePosition(4, 0): blackRook,
         });
 
         final moves = moveController.calculatePossibleMoves(
             FigurePosition(4, 3), whitePawn, deck);
 
-        // Пешка может ходить только вперед по той же вертикали (не открывая короля)
         expect(moves, contains(FigurePosition(4, 2)));
-        // Но не может идти в стороны, так как откроет короля
         expect(moves.length, equals(1));
       });
 
@@ -1841,11 +1763,10 @@ void main() {
         final blackRook = Figure(type: FigureType.rook, color: FigureColor.black);
         final deck = Deck(deckMatrix: {
           FigurePosition(4, 7): whiteKing,
-          FigurePosition(0, 4): whiteQueen, // ферзь далеко от линии атаки
-          FigurePosition(4, 0): blackRook, // ладья атакует короля по вертикали
+              FigurePosition(0, 4): whiteQueen,
+          FigurePosition(4, 0): blackRook,
         });
 
-        // Проверяем, что король под шахом
         expect(moveController.isKingInCheck(FigureColor.white, deck), isTrue);
 
         final moves = moveController.calculatePossibleMoves(
@@ -1853,13 +1774,10 @@ void main() {
 
 
 
-        // Ферзь может захватить атакующую ладью
         expect(moves, contains(FigurePosition(4, 0)));
         
-        // Ферзь может встать на линию атаки для блокировки
         expect(moves, contains(FigurePosition(4, 4)));
         
-        // Но не может делать ходы, которые не блокируют шах
         expect(moves, isNot(contains(FigurePosition(0, 1))));
         expect(moves, isNot(contains(FigurePosition(0, 5))));
       });
@@ -1870,21 +1788,19 @@ void main() {
         final blackBishop = Figure(type: FigureType.bishop, color: FigureColor.black);
         final deck = Deck(deckMatrix: {
           FigurePosition(4, 4): whiteKing,
-          FigurePosition(3, 3): whiteBishop, // слон защищает короля
-          FigurePosition(0, 0): blackBishop, // черный слон на диагонали
+          FigurePosition(3, 3): whiteBishop,
+          FigurePosition(0, 0): blackBishop,
         });
 
         final moves = moveController.calculatePossibleMoves(
             FigurePosition(3, 3), whiteBishop, deck);
 
-        // Слон не может покинуть диагональ защиты
         expect(moves, isNot(contains(FigurePosition(3, 4))));
         expect(moves, isNot(contains(FigurePosition(4, 2))));
         
-        // Но может двигаться по диагонали
         expect(moves, contains(FigurePosition(2, 2)));
         expect(moves, contains(FigurePosition(1, 1)));
-        expect(moves, contains(FigurePosition(0, 0))); // захват атакующего
+        expect(moves, contains(FigurePosition(0, 0)));
       });
 
       test('должен разрешать все ходы когда король не под угрозой', () {
@@ -1894,7 +1810,7 @@ void main() {
         final deck = Deck(deckMatrix: {
           FigurePosition(4, 4): whiteKing,
           FigurePosition(0, 0): whiteQueen,
-          FigurePosition(7, 7): blackPawn, // далеко от короля
+          FigurePosition(7, 7): blackPawn,
         });
 
         final normalMoves = moveController.getQueenMoves(
@@ -1902,7 +1818,6 @@ void main() {
         final filteredMoves = moveController.calculatePossibleMoves(
             FigurePosition(0, 0), whiteQueen, deck);
 
-        // Все ходы должны быть разрешены
         expect(filteredMoves.length, equals(normalMoves.length));
         for (final move in normalMoves) {
           expect(filteredMoves, contains(move));
@@ -1914,17 +1829,15 @@ void main() {
         final blackQueen = Figure(type: FigureType.queen, color: FigureColor.black);
         final deck = Deck(deckMatrix: {
           FigurePosition(4, 4): whiteKing,
-          FigurePosition(4, 7): blackQueen, // ферзь атакует короля - шах!
+          FigurePosition(4, 7): blackQueen,
         });
 
-        // Проверяем, что король действительно под шахом
         expect(moveController.isKingInCheck(FigureColor.white, deck), isTrue);
 
         final kingMoves = moveController.calculatePossibleMoves(
             FigurePosition(4, 4), whiteKing, deck);
 
 
-        // Король может уйти из-под шаха
         expect(kingMoves, contains(FigurePosition(3, 5)));
         expect(kingMoves, contains(FigurePosition(5, 3)));
         expect(kingMoves, contains(FigurePosition(3, 3)));
@@ -1938,7 +1851,7 @@ void main() {
         final deck = Deck(deckMatrix: {
           FigurePosition(4, 4): whiteKing,
           FigurePosition(3, 4): whitePawn,
-          FigurePosition(2, 5): blackKnight, // конь атакует короля
+          FigurePosition(2, 5): blackKnight,
         });
 
         final kingMoves = moveController.calculatePossibleMoves(
@@ -1946,7 +1859,7 @@ void main() {
 
         expect(kingMoves, isNot(contains(FigurePosition(3, 3))));
         
-        // Но может идти в безопасные места
+  
         expect(kingMoves, contains(FigurePosition(5, 4)));
         expect(kingMoves, contains(FigurePosition(5, 3)));
       });
