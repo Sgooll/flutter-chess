@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_chess/src/engine/chess_engine_scope.dart';
 import 'package:flutter_chess/src/feature/game/models/figure.dart';
+import 'package:flutter_chess/src/feature/game/models/figure_move.dart';
 import 'package:flutter_chess/src/feature/game/models/game_status.dart';
 
 class GameScreen extends StatefulWidget {
@@ -12,12 +13,10 @@ class GameScreen extends StatefulWidget {
 
 class _GameScreenState extends State<GameScreen> with TickerProviderStateMixin {
   late AnimationController _animationController;
-  late Animation<Offset> _animation;
 
-  Figure? _animatingFigure;
-  FigurePosition? _animationStart;
-  FigurePosition? _animationEnd;
+  List<FigureMove> _animatingMoves = [];
   bool _isAnimating = false;
+  final Map<int, Animation<Offset>> _animations = {};
 
   @override
   void initState() {
@@ -27,14 +26,6 @@ class _GameScreenState extends State<GameScreen> with TickerProviderStateMixin {
       duration: const Duration(milliseconds: 200),
       vsync: this,
     );
-
-    _animation = Tween<Offset>(
-      begin: Offset.zero,
-      end: Offset.zero,
-    ).animate(CurvedAnimation(
-      parent: _animationController,
-      curve: Curves.easeInOut,
-    ));
 
     final chessEngine = ChessEngineScope.of(context);
     chessEngine.addListener(() {
@@ -58,30 +49,32 @@ class _GameScreenState extends State<GameScreen> with TickerProviderStateMixin {
     super.dispose();
   }
 
-  Future<void> _animateMove(
-      FigurePosition from, FigurePosition to, Figure figure) async {
+  Future<void> _animateMoves(List<FigureMove> moves) async {
+    if (moves.isEmpty) return;
+
     setState(() {
-      _animatingFigure = figure;
-      _animationStart = from;
-      _animationEnd = to;
+      _animatingMoves = moves;
       _isAnimating = true;
+      _animations.clear();
     });
 
-    _animation = Tween<Offset>(
-      begin: Offset(from.x.toDouble(), from.y.toDouble()),
-      end: Offset(to.x.toDouble(), to.y.toDouble()),
-    ).animate(CurvedAnimation(
-      parent: _animationController,
-      curve: Curves.easeInOut,
-    ));
+    for (int i = 0; i < moves.length; i++) {
+      final move = moves[i];
+      _animations[i] = Tween<Offset>(
+        begin: Offset(move.from.x.toDouble(), move.from.y.toDouble()),
+        end: Offset(move.to.x.toDouble(), move.to.y.toDouble()),
+      ).animate(CurvedAnimation(
+        parent: _animationController,
+        curve: Curves.easeInOut,
+      ));
+    }
 
     await _animationController.forward();
 
     setState(() {
       _isAnimating = false;
-      _animatingFigure = null;
-      _animationStart = null;
-      _animationEnd = null;
+      _animatingMoves = [];
+      _animations.clear();
     });
 
     _animationController.reset();
@@ -105,7 +98,6 @@ class _GameScreenState extends State<GameScreen> with TickerProviderStateMixin {
           height: boardSize,
           child: Stack(
             children: [
-              // Основная шахматная доска
               ListenableBuilder(
                 listenable: chessEngine,
                 builder: (context, child) => GridView.builder(
@@ -120,10 +112,9 @@ class _GameScreenState extends State<GameScreen> with TickerProviderStateMixin {
                     final position = FigurePosition(x, y);
                     final figure = chessEngine.deck.deckMatrix[position];
 
-                    // Скрываем фигуру во время анимации
                     final shouldHideFigure = _isAnimating &&
-                        (position == _animationStart ||
-                            position == _animationEnd);
+                        _animatingMoves.any((move) =>
+                            position == move.from || position == move.to);
 
                     return SquareWidget(
                       x: x,
@@ -135,47 +126,51 @@ class _GameScreenState extends State<GameScreen> with TickerProviderStateMixin {
                         if (chessEngine.selectedFigurePosition == null) {
                           chessEngine.selectFigure(position);
                         } else {
-                          // Если это валидный ход, запускаем анимацию
                           if (chessEngine.possibleMoves.contains(position)) {
-                            final fromPosition =
-                                chessEngine.selectedFigurePosition!;
-                            final movingFigure =
-                                chessEngine.deck.deckMatrix[fromPosition];
+                            // Получаем список всех движений (включая рокировку)
+                            final moves = chessEngine.moveFigure(position);
 
-                            if (movingFigure != null) {
-                              await _animateMove(
-                                  fromPosition, position, movingFigure);
+                            // Анимируем все движения
+                            if (moves.isNotEmpty) {
+                              await _animateMoves(moves);
                             }
+                          } else {
+                            chessEngine.moveFigure(position);
                           }
-                          chessEngine.moveFigure(position);
                         }
                       },
                     );
                   },
                 ),
               ),
+              if (_isAnimating)
+                ..._animatingMoves.asMap().entries.map((entry) {
+                  final index = entry.key;
+                  final move = entry.value;
+                  final animation = _animations[index];
 
-              // Слой анимации
-              if (_isAnimating && _animatingFigure != null)
-                AnimatedBuilder(
-                  animation: _animation,
-                  builder: (context, child) {
-                    return Positioned(
-                      left: _animation.value.dx * squareSize,
-                      top: _animation.value.dy * squareSize,
-                      width: squareSize,
-                      height: squareSize,
-                      child: Container(
-                        alignment: Alignment.center,
-                        child: Image.asset(
-                          'assets/${_animatingFigure!.color.name}-${_animatingFigure!.type.name}.png',
-                          width: squareSize,
-                          height: squareSize,
+                  if (animation == null) return const SizedBox.shrink();
+
+                  return AnimatedBuilder(
+                    animation: animation,
+                    builder: (context, child) {
+                      return Positioned(
+                        left: animation.value.dx * squareSize,
+                        top: animation.value.dy * squareSize,
+                        width: squareSize,
+                        height: squareSize,
+                        child: Container(
+                          alignment: Alignment.center,
+                          child: Image.asset(
+                            'assets/${move.figure.color.name}-${move.figure.type.name}.png',
+                            width: squareSize,
+                            height: squareSize,
+                          ),
                         ),
-                      ),
-                    );
-                  },
-                ),
+                      );
+                    },
+                  );
+                }),
             ],
           ),
         ),
@@ -227,7 +222,7 @@ class SquareWidget extends StatelessWidget {
             Container(
               width: 15,
               height: 15,
-              decoration:  BoxDecoration(
+              decoration: BoxDecoration(
                 color: const Color(0xff7F7F7F).withOpacity(0.6),
                 shape: BoxShape.circle,
               ),

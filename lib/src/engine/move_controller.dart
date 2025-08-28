@@ -5,6 +5,8 @@ import 'package:flutter_chess/src/feature/game/models/figure.dart';
 class MoveController {
   MoveController();
 
+  final Set<FigurePosition> movedFigures = {};
+
   List<FigurePosition> calculatePossibleMoves(
       FigurePosition position, Figure figure, Deck deck) {
     final potentialMoves = switch (figure.type) {
@@ -31,7 +33,7 @@ class MoveController {
       newMatrix[to] = figure;
     }
 
-    return Deck(deckMatrix: newMatrix);
+    return Deck(deckMatrix: newMatrix, mainColor: deck.mainColor);
   }
 
   @visibleForTesting
@@ -39,7 +41,7 @@ class MoveController {
       FigurePosition position, Figure figure, Deck deck) {
     final moves = <FigurePosition>[];
 
-    final direction = figure.color == FigureColor.white ? -1 : 1;
+    final direction = (figure.color == deck.mainColor) ? -1 : 1;
 
     final nextPosition = FigurePosition(position.x, position.y + direction);
 
@@ -52,15 +54,14 @@ class MoveController {
     if (isNextPositionEmpty) {
       moves.add(nextPosition);
 
-      // Двойной ход с начальной позиции только если первый ход возможен
-      if (position.y == 1 && figure.color == FigureColor.black) {
+      if (position.y == 1 && figure.color != deck.mainColor) {
         final doubleStepPosition = FigurePosition(position.x, position.y + 2);
         if (deck.deckMatrix[doubleStepPosition] == null) {
           moves.add(doubleStepPosition);
         }
       }
 
-      if (position.y == 6 && figure.color == FigureColor.white) {
+      if (position.y == 6 && figure.color == deck.mainColor) {
         final doubleStepPosition = FigurePosition(position.x, position.y - 2);
         if (deck.deckMatrix[doubleStepPosition] == null) {
           moves.add(doubleStepPosition);
@@ -237,7 +238,8 @@ class MoveController {
 
   @visibleForTesting
   List<FigurePosition> getKingMoves(
-      FigurePosition position, Figure figure, Deck deck) {
+      FigurePosition position, Figure figure, Deck deck,
+      {bool checkCastling = true}) {
     final directions = [
       (1, 0),
       (-1, 0),
@@ -263,6 +265,10 @@ class MoveController {
       }
     }
 
+    if (checkCastling) {
+      moves.addAll(getCastlingMoves(position, figure, deck));
+    }
+
     return moves;
   }
 
@@ -275,23 +281,21 @@ class MoveController {
       FigureType.bishop => getBishopMoves(position, figure, deck),
       FigureType.rook => getRookMoves(position, figure, deck),
       FigureType.queen => getQueenMoves(position, figure, deck),
-      FigureType.king => getKingMoves(position, figure, deck),
+      FigureType.king =>
+        getKingMoves(position, figure, deck, checkCastling: false),
     };
   }
 
-  /// Специальная логика для атакуемых клеток пешки
   List<FigurePosition> _getPawnAttackedSquares(
       FigurePosition position, Figure figure) {
     final moves = <FigurePosition>[];
     final direction = figure.color == FigureColor.white ? -1 : 1;
 
-    // Пешка может атаковать только по диагонали
     final rightAttackPosition =
         FigurePosition(position.x + 1, position.y + direction);
     final leftAttackPosition =
         FigurePosition(position.x - 1, position.y + direction);
 
-    // Добавляем атакуемые клетки независимо от того, заняты они или нет
     if (!rightAttackPosition.outOfBounds) {
       moves.add(rightAttackPosition);
     }
@@ -333,5 +337,62 @@ class MoveController {
     }
 
     return false;
+  }
+
+  List<FigurePosition> getCastlingMoves(
+      FigurePosition kingPosition, Figure king, Deck deck) {
+    final moves = <FigurePosition>[];
+
+    if (movedFigures.contains(kingPosition)) {
+      return moves;
+    }
+
+    if (isKingInCheck(king.color, deck)) {
+      return moves;
+    }
+
+    final kingRow = king.color == FigureColor.white ? 7 : 0;
+
+    final kingsideRookPos = FigurePosition(7, kingRow);
+    if (!movedFigures.contains(kingsideRookPos) &&
+        deck.deckMatrix[kingsideRookPos]?.type == FigureType.rook &&
+        deck.deckMatrix[kingsideRookPos]?.color == king.color) {
+      if (deck.deckMatrix[FigurePosition(5, kingRow)] == null &&
+          deck.deckMatrix[FigurePosition(6, kingRow)] == null) {
+        final tempDeck1 =
+            _simulateMove(deck, kingPosition, FigurePosition(5, kingRow));
+        final tempDeck2 =
+            _simulateMove(deck, kingPosition, FigurePosition(6, kingRow));
+
+        if (!isKingInCheck(king.color, tempDeck1) &&
+            !isKingInCheck(king.color, tempDeck2)) {
+          moves.add(FigurePosition(6, kingRow));
+        }
+      }
+    }
+
+    final queensideRookPos = FigurePosition(0, kingRow);
+    if (!movedFigures.contains(queensideRookPos) &&
+        deck.deckMatrix[queensideRookPos]?.type == FigureType.rook &&
+        deck.deckMatrix[queensideRookPos]?.color == king.color) {
+      if (deck.deckMatrix[FigurePosition(3, kingRow)] == null &&
+          deck.deckMatrix[FigurePosition(2, kingRow)] == null &&
+          deck.deckMatrix[FigurePosition(1, kingRow)] == null) {
+        final tempDeck1 =
+            _simulateMove(deck, kingPosition, FigurePosition(3, kingRow));
+        final tempDeck2 =
+            _simulateMove(deck, kingPosition, FigurePosition(2, kingRow));
+        final tempDeck3 =
+            _simulateMove(deck, kingPosition, FigurePosition(1, kingRow));
+
+        if (!isKingInCheck(king.color, tempDeck1) &&
+            !isKingInCheck(king.color, tempDeck2) &&
+            !isKingInCheck(king.color, tempDeck3)) {
+          moves.add(FigurePosition(2, kingRow));
+        }
+      }
+    }
+
+    return moves;
   }
 }

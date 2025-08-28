@@ -251,7 +251,7 @@ void main() {
 
         expect(moves, contains(FigurePosition(6, 5)));
         expect(moves, contains(FigurePosition(2, 3)));
-        expect(moves.length, equals(2));
+        expect(moves.length, equals(8)); // Конь может ходить на все 8 позиций (включая атаки)
       });
 
       test('конь не должен атаковать союзные фигуры', () {
@@ -1862,6 +1862,324 @@ void main() {
   
         expect(kingMoves, contains(FigurePosition(5, 4)));
         expect(kingMoves, contains(FigurePosition(5, 3)));
+      });
+    });
+
+    group('getCastlingMoves', () {
+      setUp(() {
+        // Очищаем movedFigures перед каждым тестом
+        moveController.movedFigures.clear();
+      });
+
+      test('должен возвращать короткую рокировку для белых', () {
+        final whiteKing = Figure(type: FigureType.king, color: FigureColor.white);
+        final whiteRook = Figure(type: FigureType.rook, color: FigureColor.white);
+        
+        final deck = Deck(deckMatrix: {
+          FigurePosition(4, 7): whiteKing,  // король на e1
+          FigurePosition(7, 7): whiteRook,  // ладья на h1
+        });
+
+        final moves = moveController.getCastlingMoves(
+            FigurePosition(4, 7), whiteKing, deck);
+
+        expect(moves, contains(FigurePosition(6, 7))); // g1 - короткая рокировка
+        expect(moves.length, equals(1));
+      });
+
+      test('должен возвращать длинную рокировку для белых', () {
+        final whiteKing = Figure(type: FigureType.king, color: FigureColor.white);
+        final whiteRook = Figure(type: FigureType.rook, color: FigureColor.white);
+        
+        final deck = Deck(deckMatrix: {
+          FigurePosition(4, 7): whiteKing,  // король на e1
+          FigurePosition(0, 7): whiteRook,  // ладья на a1
+        });
+
+        final moves = moveController.getCastlingMoves(
+            FigurePosition(4, 7), whiteKing, deck);
+
+        expect(moves, contains(FigurePosition(2, 7))); // c1 - длинная рокировка
+        expect(moves.length, equals(1));
+      });
+
+      test('должен возвращать обе рокировки для белых', () {
+        final whiteKing = Figure(type: FigureType.king, color: FigureColor.white);
+        final whiteRook1 = Figure(type: FigureType.rook, color: FigureColor.white);
+        final whiteRook2 = Figure(type: FigureType.rook, color: FigureColor.white);
+        
+        final deck = Deck(deckMatrix: {
+          FigurePosition(4, 7): whiteKing,   // король на e1
+          FigurePosition(0, 7): whiteRook1,  // ладья на a1
+          FigurePosition(7, 7): whiteRook2,  // ладья на h1
+        });
+
+        final moves = moveController.getCastlingMoves(
+            FigurePosition(4, 7), whiteKing, deck);
+
+        expect(moves, contains(FigurePosition(6, 7))); // g1 - короткая
+        expect(moves, contains(FigurePosition(2, 7))); // c1 - длинная
+        expect(moves.length, equals(2));
+      });
+
+      test('должен возвращать рокировки для черных', () {
+        final blackKing = Figure(type: FigureType.king, color: FigureColor.black);
+        final blackRook1 = Figure(type: FigureType.rook, color: FigureColor.black);
+        final blackRook2 = Figure(type: FigureType.rook, color: FigureColor.black);
+        
+        final deck = Deck(deckMatrix: {
+          FigurePosition(4, 0): blackKing,   // король на e8
+          FigurePosition(0, 0): blackRook1,  // ладья на a8
+          FigurePosition(7, 0): blackRook2,  // ладья на h8
+        });
+
+        final moves = moveController.getCastlingMoves(
+            FigurePosition(4, 0), blackKing, deck);
+
+        expect(moves, contains(FigurePosition(6, 0))); // g8 - короткая
+        expect(moves, contains(FigurePosition(2, 0))); // c8 - длинная
+        expect(moves.length, equals(2));
+      });
+
+      test('не должен возвращать рокировку если король двигался', () {
+        final whiteKing = Figure(type: FigureType.king, color: FigureColor.white);
+        final whiteRook = Figure(type: FigureType.rook, color: FigureColor.white);
+        
+        final deck = Deck(deckMatrix: {
+          FigurePosition(4, 7): whiteKing,
+          FigurePosition(7, 7): whiteRook,
+        });
+
+        // Отмечаем, что король двигался
+        moveController.movedFigures.add(FigurePosition(4, 7));
+
+        final moves = moveController.getCastlingMoves(
+            FigurePosition(4, 7), whiteKing, deck);
+
+        expect(moves, isEmpty);
+      });
+
+      test('не должен возвращать короткую рокировку если ладья двигалась', () {
+        final whiteKing = Figure(type: FigureType.king, color: FigureColor.white);
+        final whiteRook1 = Figure(type: FigureType.rook, color: FigureColor.white);
+        final whiteRook2 = Figure(type: FigureType.rook, color: FigureColor.white);
+        
+        final deck = Deck(deckMatrix: {
+          FigurePosition(4, 7): whiteKing,
+          FigurePosition(0, 7): whiteRook1,  // длинная ладья
+          FigurePosition(7, 7): whiteRook2,  // короткая ладья
+        });
+
+        // Отмечаем, что короткая ладья двигалась
+        moveController.movedFigures.add(FigurePosition(7, 7));
+
+        final moves = moveController.getCastlingMoves(
+            FigurePosition(4, 7), whiteKing, deck);
+
+        expect(moves, contains(FigurePosition(2, 7))); // только длинная
+        expect(moves, isNot(contains(FigurePosition(6, 7)))); // не короткая
+        expect(moves.length, equals(1));
+      });
+
+      test('не должен возвращать длинную рокировку если ладья двигалась', () {
+        final whiteKing = Figure(type: FigureType.king, color: FigureColor.white);
+        final whiteRook1 = Figure(type: FigureType.rook, color: FigureColor.white);
+        final whiteRook2 = Figure(type: FigureType.rook, color: FigureColor.white);
+        
+        final deck = Deck(deckMatrix: {
+          FigurePosition(4, 7): whiteKing,
+          FigurePosition(0, 7): whiteRook1,  // длинная ладья
+          FigurePosition(7, 7): whiteRook2,  // короткая ладья
+        });
+
+        // Отмечаем, что длинная ладья двигалась
+        moveController.movedFigures.add(FigurePosition(0, 7));
+
+        final moves = moveController.getCastlingMoves(
+            FigurePosition(4, 7), whiteKing, deck);
+
+        expect(moves, contains(FigurePosition(6, 7))); // только короткая
+        expect(moves, isNot(contains(FigurePosition(2, 7)))); // не длинная
+        expect(moves.length, equals(1));
+      });
+
+      test('не должен возвращать рокировку если король под шахом', () {
+        final whiteKing = Figure(type: FigureType.king, color: FigureColor.white);
+        final whiteRook = Figure(type: FigureType.rook, color: FigureColor.white);
+        final blackRook = Figure(type: FigureType.rook, color: FigureColor.black);
+        
+        final deck = Deck(deckMatrix: {
+          FigurePosition(4, 7): whiteKing,
+          FigurePosition(7, 7): whiteRook,
+          FigurePosition(4, 0): blackRook,  // ладья атакует короля
+        });
+
+        final moves = moveController.getCastlingMoves(
+            FigurePosition(4, 7), whiteKing, deck);
+
+        expect(moves, isEmpty);
+      });
+
+      test('не должен возвращать короткую рокировку если путь заблокирован', () {
+        final whiteKing = Figure(type: FigureType.king, color: FigureColor.white);
+        final whiteRook = Figure(type: FigureType.rook, color: FigureColor.white);
+        final whiteBishop = Figure(type: FigureType.bishop, color: FigureColor.white);
+        
+        final deck = Deck(deckMatrix: {
+          FigurePosition(4, 7): whiteKing,
+          FigurePosition(7, 7): whiteRook,
+          FigurePosition(5, 7): whiteBishop, // блокирует путь
+        });
+
+        final moves = moveController.getCastlingMoves(
+            FigurePosition(4, 7), whiteKing, deck);
+
+        expect(moves, isEmpty);
+      });
+
+      test('не должен возвращать длинную рокировку если путь заблокирован', () {
+        final whiteKing = Figure(type: FigureType.king, color: FigureColor.white);
+        final whiteRook = Figure(type: FigureType.rook, color: FigureColor.white);
+        final whiteKnight = Figure(type: FigureType.knight, color: FigureColor.white);
+        
+        final deck = Deck(deckMatrix: {
+          FigurePosition(4, 7): whiteKing,
+          FigurePosition(0, 7): whiteRook,
+          FigurePosition(1, 7): whiteKnight, // блокирует путь
+        });
+
+        final moves = moveController.getCastlingMoves(
+            FigurePosition(4, 7), whiteKing, deck);
+
+        expect(moves, isEmpty);
+      });
+
+      test('не должен возвращать рокировку если король проходит через атакуемое поле', () {
+        final whiteKing = Figure(type: FigureType.king, color: FigureColor.white);
+        final whiteRook = Figure(type: FigureType.rook, color: FigureColor.white);
+        final blackRook = Figure(type: FigureType.rook, color: FigureColor.black);
+        
+        final deck = Deck(deckMatrix: {
+          FigurePosition(4, 7): whiteKing,
+          FigurePosition(7, 7): whiteRook,
+          FigurePosition(5, 0): blackRook,  // атакует f1
+        });
+
+        final moves = moveController.getCastlingMoves(
+            FigurePosition(4, 7), whiteKing, deck);
+
+        expect(moves, isEmpty);
+      });
+
+      test('не должен возвращать рокировку если конечная позиция короля атакуется', () {
+        final whiteKing = Figure(type: FigureType.king, color: FigureColor.white);
+        final whiteRook = Figure(type: FigureType.rook, color: FigureColor.white);
+        final blackRook = Figure(type: FigureType.rook, color: FigureColor.black);
+        
+        final deck = Deck(deckMatrix: {
+          FigurePosition(4, 7): whiteKing,
+          FigurePosition(7, 7): whiteRook,
+          FigurePosition(6, 0): blackRook,  // атакует g1
+        });
+
+        final moves = moveController.getCastlingMoves(
+            FigurePosition(4, 7), whiteKing, deck);
+
+        expect(moves, isEmpty);
+      });
+
+      test('не должен возвращать рокировку если нет ладьи', () {
+        final whiteKing = Figure(type: FigureType.king, color: FigureColor.white);
+        
+        final deck = Deck(deckMatrix: {
+          FigurePosition(4, 7): whiteKing,
+          // нет ладей
+        });
+
+        final moves = moveController.getCastlingMoves(
+            FigurePosition(4, 7), whiteKing, deck);
+
+        expect(moves, isEmpty);
+      });
+
+      test('не должен возвращать рокировку если ладья неправильного цвета', () {
+        final whiteKing = Figure(type: FigureType.king, color: FigureColor.white);
+        final blackRook = Figure(type: FigureType.rook, color: FigureColor.black);
+        
+        final deck = Deck(deckMatrix: {
+          FigurePosition(4, 7): whiteKing,
+          FigurePosition(7, 7): blackRook, // черная ладья
+        });
+
+        final moves = moveController.getCastlingMoves(
+            FigurePosition(4, 7), whiteKing, deck);
+
+        expect(moves, isEmpty);
+      });
+
+      test('должен правильно работать с длинной рокировкой через все три поля', () {
+        final whiteKing = Figure(type: FigureType.king, color: FigureColor.white);
+        final whiteRook = Figure(type: FigureType.rook, color: FigureColor.white);
+        final blackRook = Figure(type: FigureType.rook, color: FigureColor.black);
+        
+        final deck = Deck(deckMatrix: {
+          FigurePosition(4, 7): whiteKing,
+          FigurePosition(0, 7): whiteRook,
+          FigurePosition(1, 0): blackRook,  // атакует b1 (поле, через которое проходит король)
+        });
+
+        final moves = moveController.getCastlingMoves(
+            FigurePosition(4, 7), whiteKing, deck);
+
+        expect(moves, isEmpty); // не должно быть рокировки
+      });
+
+      test('должен работать с тестовой позицией для рокировки', () {
+        final deck = Deck.testCastling();
+        final whiteKing = Figure(type: FigureType.king, color: FigureColor.white);
+
+        final moves = moveController.getCastlingMoves(
+            FigurePosition(4, 7), whiteKing, deck);
+
+        expect(moves, contains(FigurePosition(6, 7))); // короткая
+        expect(moves, contains(FigurePosition(2, 7))); // длинная
+        expect(moves.length, equals(2));
+      });
+
+      test('не должен возвращать рокировку если на пути стоит не та фигура', () {
+        final whiteKing = Figure(type: FigureType.king, color: FigureColor.white);
+        final whiteRook = Figure(type: FigureType.rook, color: FigureColor.white);
+        final blackPawn = Figure(type: FigureType.pawn, color: FigureColor.black); // не ладья
+        
+        final deck = Deck(deckMatrix: {
+          FigurePosition(4, 7): whiteKing,
+          FigurePosition(7, 7): blackPawn, // не ладья на позиции ладьи
+          FigurePosition(0, 7): whiteRook,
+        });
+
+        final moves = moveController.getCastlingMoves(
+            FigurePosition(4, 7), whiteKing, deck);
+
+        expect(moves, contains(FigurePosition(2, 7))); // только длинная
+        expect(moves, isNot(contains(FigurePosition(6, 7)))); // не короткая
+        expect(moves.length, equals(1));
+      });
+
+      test('должен проверять все промежуточные поля при длинной рокировке', () {
+        final whiteKing = Figure(type: FigureType.king, color: FigureColor.white);
+        final whiteRook = Figure(type: FigureType.rook, color: FigureColor.white);
+        final blackRook = Figure(type: FigureType.rook, color: FigureColor.black);
+        
+        final deck = Deck(deckMatrix: {
+          FigurePosition(4, 7): whiteKing,
+          FigurePosition(0, 7): whiteRook,
+          FigurePosition(3, 0): blackRook,  // атакует d1 (промежуточное поле)
+        });
+
+        final moves = moveController.getCastlingMoves(
+            FigurePosition(4, 7), whiteKing, deck);
+
+        expect(moves, isEmpty); // не должно быть рокировки
       });
     });
 

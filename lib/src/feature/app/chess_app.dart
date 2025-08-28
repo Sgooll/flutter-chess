@@ -19,7 +19,7 @@ class _ChessAppState extends State<ChessApp> {
   void initState() {
     super.initState();
     chessEngine = ChessEngine(
-      deck: Deck.whitePlayer(),
+      deck: Deck.testCastling(),
       moveController: MoveController(),
     );
   }
